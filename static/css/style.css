@@ -98,6 +98,7 @@ h1 .tail { display: block; font-size: clamp(1.25rem, 2.6vw, 1.9rem); font-weight
 .btn--primary { background: var(--primary); border-color: var(--primary); color: #fff; }
 .btn--primary:hover { background: var(--primary-ink); color: #fff; }
 .btn svg { width: 16px; height: 16px; fill: currentColor; }
+.btn-emoji { font-size: 16px; line-height: 1; }
 .hero-media { margin: 40px auto 0; }
 .media-card { background: #1a1410; border-radius: var(--radius); box-shadow: var(--shadow-float); overflow: hidden; border: 1px solid #3a2d22; }
 .media-card video { width: 100%; }
@@ -284,10 +285,11 @@ footer { border-top: 1px solid var(--line); padding: 34px 0 44px; color: var(--i
 .side { position: fixed; top: 0; left: 0; bottom: 0; width: 232px; padding: 28px 22px; background: rgba(255,255,255,.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-right: 1px solid var(--line); z-index: 1000; display: flex; flex-direction: column; }
 .side .brand { font-size: 1.15rem; }
 .side-sub { margin-top: 10px; font-size: .78rem; line-height: 1.45; color: var(--ink-3); }
-.side-btns { display: flex; gap: 18px; margin-top: 16px; }
+.side-btns { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; }
 .side-btns .btn { padding: 0; font-size: .9rem; gap: 6px; border: 0; border-radius: 0; background: none; box-shadow: none; color: var(--primary-ink); font-weight: 600; }
 .side-btns .btn:hover { transform: none; box-shadow: none; color: var(--primary); text-decoration: underline; }
 .side-btns .btn svg { width: 14px; height: 14px; }
+.side-btns .btn-emoji { font-size: 14px; }
 .side-links { margin-top: 22px; display: flex; flex-direction: column; position: relative; padding-left: 18px; }
 .side-links::before { content: ""; position: absolute; left: 5px; top: 10px; bottom: 10px; width: 2px; background: var(--line-2); border-radius: 2px; }
 .side-links a { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; margin: 1px 0; border-radius: 8px; font-size: .92rem; font-weight: 500; color: var(--ink-2); transition: background .15s, color .15s; }
