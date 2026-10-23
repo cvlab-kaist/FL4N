@@ -1,0 +1,297 @@
+{
+ "models": [
+  "ours",
+  "gt",
+  "c4g",
+  "neoverse",
+  "movies",
+  "4dgt"
+ ],
+ "scenes": [
+  {
+   "id": "Balloon1",
+   "ds": "nvidia",
+   "name": "Balloon1",
+   "keep": [
+    1,
+    2,
+    3,
+    4,
+    7,
+    8,
+    9,
+    10
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 22.26,
+   "diag": true
+  },
+  {
+   "id": "Balloon2",
+   "ds": "nvidia",
+   "name": "Balloon2",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    10
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 26.76,
+   "diag": true
+  },
+  {
+   "id": "DynamicFace",
+   "ds": "nvidia",
+   "name": "Dynamic face",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    10
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 20.28,
+   "diag": true
+  },
+  {
+   "id": "Jumping",
+   "ds": "nvidia",
+   "name": "Jumping",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 23.87,
+   "diag": true
+  },
+  {
+   "id": "Playground",
+   "ds": "nvidia",
+   "name": "Playground",
+   "keep": [
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9,
+    10
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 24.31,
+   "diag": true
+  },
+  {
+   "id": "Skating",
+   "ds": "nvidia",
+   "name": "Skating",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    10
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 28.83,
+   "diag": true
+  },
+  {
+   "id": "Teadybear",
+   "ds": "nvidia",
+   "name": "Teddy bear",
+   "keep": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 27.93,
+   "diag": true
+  },
+  {
+   "id": "Truck",
+   "ds": "nvidia",
+   "name": "Truck",
+   "keep": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 29.25,
+   "diag": true
+  },
+  {
+   "id": "Umbrella",
+   "ds": "nvidia",
+   "name": "Umbrella",
+   "keep": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9
+   ],
+   "w": 320,
+   "h": 180,
+   "psnr": 25.81,
+   "diag": true
+  },
+  {
+   "id": "Scene377",
+   "ds": "camxtime",
+   "name": "CamxTime 377",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "w": 320,
+   "h": 320,
+   "psnr": 33.83,
+   "diag": true
+  },
+  {
+   "id": "Scene381",
+   "ds": "camxtime",
+   "name": "CamxTime 381",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "w": 320,
+   "h": 320,
+   "psnr": 30.61,
+   "diag": true
+  },
+  {
+   "id": "Scene383",
+   "ds": "camxtime",
+   "name": "CamxTime 383",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "w": 320,
+   "h": 320,
+   "psnr": 30.58,
+   "diag": true
+  },
+  {
+   "id": "Scene392",
+   "ds": "camxtime",
+   "name": "CamxTime 392",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "w": 320,
+   "h": 320,
+   "psnr": 33.93,
+   "diag": true
+  },
+  {
+   "id": "Scene403",
+   "ds": "camxtime",
+   "name": "CamxTime 403",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "w": 320,
+   "h": 320,
+   "psnr": 33.85,
+   "diag": true
+  },
+  {
+   "id": "Scene410",
+   "ds": "camxtime",
+   "name": "CamxTime 410",
+   "keep": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "w": 320,
+   "h": 320,
+   "psnr": 32.58,
+   "diag": true
+  }
+ ]
+}

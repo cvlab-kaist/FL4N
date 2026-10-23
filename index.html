@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FL4N: Feed-forward Latent Model for 4D Novel View Synthesis</title>
+<meta name="description" content="FL4N is the first feed-forward latent 4D novel view synthesis model: a frozen static latent NVS prior plus a lightweight dynamic encoder that learns a temporal residual, rendering dynamic scenes from a monocular video at novel views and timestamps in real time.">
+<meta property="og:title" content="FL4N: Feed-forward Latent Model for 4D Novel View Synthesis">
+<meta property="og:description" content="Feed-forward 4D novel view synthesis from a monocular video, in latent space, without explicit 3D primitives.">
+<meta property="og:image" content="static/images/teaser.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Flex:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css?v=202610141020">
+<link rel="stylesheet" href="static/css/figures.css?v=202610221700">
+<link rel="icon" type="image/png" href="static/images/favicon.png?v=202610191930">
+<link rel="apple-touch-icon" href="static/images/apple-touch-icon.png?v=202610191930">
+</head>
+<body>
+<div class="progress"></div>
+<nav class="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><img class="logo" src="static/images/flan-icon.webp" alt="">FL4N</a>
+    <button class="nav-toggle" aria-label="menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#explorer">Explorer</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </div>
+</nav>
+<aside class="side">
+  <a class="brand" href="#top"><img class="logo" src="static/images/flan-icon.webp" alt="">FL4N</a>
+  <div class="side-sub">Feed-forward Latent Model for 4D Novel View Synthesis</div>
+  <div class="side-btns"><a class="btn" href="#"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm8 1.5V8h4.5L14 3.5zM8 12h8v1.5H8V12zm0 3h8v1.5H8V15zm0 3h5v1.5H8V18z"/></svg>Paper</a><a class="btn" href="https://github.com/cvlab-kaist/FL4N" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>Code</a></div>
+  <div class="side-links">
+    <a href="#overview"><span class="tick"></span>Overview</a>
+    <a href="#explorer"><span class="tick"></span>Explorer</a>
+    <a href="#method"><span class="tick"></span>Method</a>
+    <a href="#results"><span class="tick"></span>Results</a>
+    <a href="#analysis"><span class="tick"></span>Analysis</a>
+    <a href="#bibtex"><span class="tick"></span>BibTeX</a>
+  </div>
+</aside>
+
+<header class="hero" id="top">
+  <div class="hero-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+  <div class="wrap">
+    <div class="hero-head">
+      <h1 class="title reveal" style="--d:60ms"><span class="grad"><img class="title-logo" src="static/images/flan.webp" alt="">FL4N</span><span class="tail">Feed-forward Latent Model for 4D Novel View Synthesis</span></h1>
+            <p class="authors reveal" style="--d:180ms">
+        <span class="au"><a href="https://eunbeen-hong.github.io/" target="_blank" rel="noopener">Eunbeen Hong</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://hdeori.github.io/" target="_blank" rel="noopener">Hyeonseo Yu</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://hg010303.github.io/" target="_blank" rel="noopener">Honggyu An</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://personal-website-rho-two-13.vercel.app/" target="_blank" rel="noopener">Jooho Son</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://hyunahko.github.io/" target="_blank" rel="noopener">Hyunah Ko</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://soow0n.github.io/" target="_blank" rel="noopener">Soowon Son</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://kchyun.github.io/" target="_blank" rel="noopener">Chaehyun Kim</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://jahyeok-koo.github.io/" target="_blank" rel="noopener">Jahyeok Koo</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://jiiiisoo.github.io/" target="_blank" rel="noopener">Jisoo Kim</a><sup>1</sup>,</span>
+        <span class="au"><a href="https://hurjunhwa.github.io/" target="_blank" rel="noopener">Junhwa Hur</a><sup>2†</sup>,</span>
+        <span class="au"><a href="https://cvlab.kaist.ac.kr/" target="_blank" rel="noopener">Seungryong Kim</a><sup>1†</sup></span>
+      </p>
+      <p class="affils reveal" style="--d:220ms"><sup>1</sup>KAIST AI &nbsp;&nbsp; <sup>2</sup>Google DeepMind</p>
+      <p class="author-note reveal" style="--d:240ms">† Corresponding authors.</p>
+      <div class="btn-row reveal" style="--d:280ms">
+        <a class="btn btn--primary" href="#"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm8 1.5V8h4.5L14 3.5zM8 12h8v1.5H8V12zm0 3h8v1.5H8V15zm0 3h5v1.5H8V18z"/></svg>Paper</a>
+        <a class="btn" href="https://github.com/cvlab-kaist/FL4N" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>Code</a>
+        <a class="btn" href="#bibtex"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2z"/></svg>BibTeX</a>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+
+
+<section class="section section--tint" id="overview">
+  <div class="wrap wrap--narrow">
+    <div class="section-head reveal"><span class="eyebrow">Overview</span><h2>The first feed-forward latent 4D NVS model.</h2></div>
+    <div class="video-shell reveal"><video id="overview-video" class="lazy" controls muted loop playsinline preload="metadata" poster="static/images/overview-poster.webp?v=202610191900" aria-label="Animated overview of FL4N: a monocular video becomes a static latent plus a temporal residual, rendered at novel views and timestamps"><source src="static/videos/overview.mp4?v=202610191900" type="video/mp4"><track kind="descriptions" src="static/videos/overview.vtt?v=202610191900" srclang="en" label="English descriptions">Your browser does not support embedded video. <a href="static/videos/overview.mp4">Download the overview.</a></video></div>
+    <div class="prose reveal">
+      <p>4D novel view synthesis renders a dynamic scene from viewpoints and instants that were never observed. Feed-forward methods do it with explicit 3D Gaussians plus motion, and pay with ghosting, floaters and holes.</p>
+      <p>A frozen static latent backbone supplies the 3D prior; a lightweight <b>dynamic encoder</b> adds a <b>temporal residual</b> on top. Training needs only images and binary motion masks.</p>
+    </div>
+        <div class="section-head reveal" style="margin-top:56px"><span class="eyebrow">Abstract</span></div>
+    <div class="prose reveal">
+      <p>4D Novel View Synthesis (NVS) from monocular videos aims to render dynamic scenes across viewpoints and timestamps, requiring jointly inferring 3D structure and temporal dynamics. Existing feed-forward methods rely on explicit 3D Gaussian representations, which are prone to temporal inconsistency and severe rendering artifacts. We present <b>FL4N</b>, the first feed-forward latent 4D NVS model. We bypass explicit 3D primitives by weaving a geometrically grounded scene prior into a unified latent representation across space and time. To overcome dynamic training data scarcity, we learn a temporal residual on top of a frozen, pretrained static latent backbone. A lightweight dynamic encoder learns to isolate true scene motion from camera parallax. Trained purely on image synthesis with binary mask guidance, FL4N achieves state-of-the-art rendering quality for 4D NVS in real time. Our proposed latent representation successfully learns a strong 4D prior, generalizes across novel views and timestamps, and cleanly decouples view and time in the latent space.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="explorer">
+  <div class="wrap">
+        <figure class="ifig reveal" data-fig="teaser">
+      
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="eyebrow">Method</span><h2>A temporal residual on a frozen static prior.</h2>
+      <p class="lede">The pretrained static encoder and renderer stay frozen. A trainable dynamic encoder beside them only has to explain what changes over time.</p></div>
+    <figure class="ifig archfig reveal" data-fig="arch">
+      <figcaption><b>Overview.</b> Context frames feed a frozen static encoder (static latent) and a lightweight dynamic encoder with learnable time tokens (residual latent). A time module adapts the residual to the target time, adds it to the static latent, and the frozen renderer decodes the target view. Click a stage to isolate it.</figcaption>
+    </figure>
+    <div class="steps">
+      <div class="step reveal"><div class="no">1</div><h3>Dynamic encoder with static anchoring</h3><p>Eight transformer layers see each context frame with a learnable time token and cross-attend into the frozen static features, so they can separate camera motion from object motion.</p></div>
+      <div class="step reveal" style="--d:80ms"><div class="no">2</div><h3>Target-time residual adaptation</h3><p>The residual is computed once. For a target time, interpolated time tokens drive an AdaLN time module with a zero-initialised gate, so training starts from the static prior.</p></div>
+      <div class="step reveal" style="--d:160ms"><div class="no">3</div><h3>Frozen renderer, image-only training</h3><p>Static plus residual latent is decoded by the untouched renderer. Losses: L2 and perceptual on the image, extra terms on moving regions, and a mask loss. No depth, flow or 3D motion labels.</p></div>
+    </div>
+      </div>
+</section>
+
+<section class="section section--tint" id="results">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="eyebrow">Quantitative results</span><h2>State of the art performance.</h2>
+      <p class="lede">FL4N substantially outperforms all Gaussian-based methods on all benchmark datasets, even without test-time pose alignment (†), showing the model successfully learns 4D priors and decouples view and time in the latent space.</p></div>
+        <div class="toolbar reveal"><div class="tabs restabs"></div><span class="hint">† 2,000-step test-time pose alignment with target frames. Pose: whether context camera poses are given.</span></div>
+    <div class="table-scroll reveal" data-label="Novel view synthesis"><table class="res" id="tab-nvs"><thead><tr><th rowspan="2">Method</th><th rowspan="2">Pose</th><th colspan="3" class="ds">NVIDIA</th><th colspan="3" class="ds">N3DV</th><th colspan="3" class="ds">Kubric4D</th><th colspan="3" class="ds">CamxTime</th><th colspan="3" class="ds">Charge</th></tr><tr><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th></tr></thead><tbody><tr class=""><td>4DGT</td><td class="pose">✓</td><td class="num  ds0">16.127</td><td class="num ">0.3884</td><td class="num ">0.5972</td><td class="num  ds0">17.813</td><td class="num ">0.6609</td><td class="num ">0.5131</td><td class="num  ds0">14.148</td><td class="num ">0.5027</td><td class="num ">0.6096</td><td class="num  ds0">17.125</td><td class="num ">0.6557</td><td class="num ">0.4893</td><td class="num  ds0">18.017</td><td class="num ">0.7786</td><td class="num ">0.5653</td></tr><tr class=""><td>MoVieS</td><td class="pose">✓</td><td class="num  ds0">11.818</td><td class="num ">0.2546</td><td class="num ">0.6760</td><td class="num second ds0">20.136</td><td class="num ">0.7045</td><td class="num second">0.4605</td><td class="num  ds0">12.411</td><td class="num ">0.3550</td><td class="num ">0.6070</td><td class="num  ds0">17.069</td><td class="num ">0.6223</td><td class="num ">0.4488</td><td class="num  ds0">18.709</td><td class="num ">0.7473</td><td class="num ">0.5298</td></tr><tr class=""><td>NeoVerse<sup>†</sup></td><td class="pose">✗</td><td class="num  ds0">15.050</td><td class="num ">0.4135</td><td class="num second">0.4626</td><td class="num  ds0">12.953</td><td class="num ">0.4806</td><td class="num ">0.5697</td><td class="num  ds0">8.954</td><td class="num ">0.2573</td><td class="num ">0.6721</td><td class="num  ds0">10.432</td><td class="num ">0.3110</td><td class="num ">0.5905</td><td class="num  ds0">15.224</td><td class="num ">0.5211</td><td class="num ">0.5919</td></tr><tr class=""><td>C4G<sup>†</sup></td><td class="pose">✗</td><td class="num  ds0">16.572</td><td class="num second">0.4182</td><td class="num ">0.6203</td><td class="num  ds0">18.444</td><td class="num second">0.7050</td><td class="num ">0.5246</td><td class="num  ds0">14.931</td><td class="num ">0.5656</td><td class="num ">0.6442</td><td class="num  ds0">20.527</td><td class="num ">0.7056</td><td class="num ">0.4369</td><td class="num  ds0">18.535</td><td class="num ">0.7797</td><td class="num ">0.5279</td></tr><tr class="ours"><td>FL4N (ours)</td><td class="pose">✗</td><td class="num second ds0">17.945</td><td class="num ">0.4113</td><td class="num ">0.5229</td><td class="num  ds0">18.581</td><td class="num ">0.6898</td><td class="num ">0.4776</td><td class="num second ds0">20.916</td><td class="num second">0.6433</td><td class="num second">0.3767</td><td class="num second ds0">21.268</td><td class="num second">0.7237</td><td class="num second">0.2743</td><td class="num second ds0">20.924</td><td class="num second">0.8217</td><td class="num second">0.4952</td></tr><tr class="ours"><td>FL4N (ours)</td><td class="pose">✓</td><td class="num best ds0">20.435</td><td class="num best">0.4835</td><td class="num best">0.3867</td><td class="num best ds0">22.896</td><td class="num best">0.7716</td><td class="num best">0.3560</td><td class="num best ds0">22.209</td><td class="num best">0.6737</td><td class="num best">0.3350</td><td class="num best ds0">25.730</td><td class="num best">0.8270</td><td class="num best">0.1681</td><td class="num best ds0">22.959</td><td class="num best">0.8324</td><td class="num best">0.4616</td></tr></tbody></table></div>
+    <div class="table-scroll reveal" data-label="Cross-time view synthesis"><table class="res" id="tab-ctvs"><thead><tr><th rowspan="2">Method</th><th rowspan="2">Pose</th><th colspan="3" class="ds">NVIDIA</th><th colspan="3" class="ds">N3DV</th><th colspan="3" class="ds">Kubric4D</th><th colspan="3" class="ds">CamxTime</th><th colspan="3" class="ds">Charge</th></tr><tr><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th></tr></thead><tbody><tr class=""><td>4DGT</td><td class="pose">✓</td><td class="num  ds0">15.937</td><td class="num ">0.3867</td><td class="num ">0.6052</td><td class="num  ds0">16.097</td><td class="num ">0.6380</td><td class="num ">0.5483</td><td class="num  ds0">15.680</td><td class="num ">0.5424</td><td class="num ">0.5786</td><td class="num  ds0">17.024</td><td class="num ">0.6573</td><td class="num ">0.4939</td><td class="num  ds0">17.939</td><td class="num ">0.7756</td><td class="num ">0.5617</td></tr><tr class=""><td>MoVieS</td><td class="pose">✓</td><td class="num  ds0">15.785</td><td class="num ">0.4614</td><td class="num ">0.5328</td><td class="num  ds0">19.710</td><td class="num ">0.7400</td><td class="num ">0.4414</td><td class="num  ds0">16.988</td><td class="num ">0.6368</td><td class="num ">0.4174</td><td class="num  ds0">17.340</td><td class="num ">0.6470</td><td class="num ">0.4224</td><td class="num  ds0">20.113</td><td class="num ">0.7771</td><td class="num ">0.5084</td></tr><tr class=""><td>NeoVerse<sup>†</sup></td><td class="pose">✗</td><td class="num  ds0">14.449</td><td class="num ">0.3819</td><td class="num ">0.4890</td><td class="num  ds0">12.447</td><td class="num ">0.4729</td><td class="num ">0.5681</td><td class="num  ds0">8.885</td><td class="num ">0.2256</td><td class="num ">0.6793</td><td class="num  ds0">10.276</td><td class="num ">0.3091</td><td class="num ">0.5911</td><td class="num  ds0">15.220</td><td class="num ">0.5380</td><td class="num ">0.5940</td></tr><tr class=""><td>C4G<sup>†</sup></td><td class="pose">✗</td><td class="num  ds0">16.403</td><td class="num ">0.4096</td><td class="num ">0.6304</td><td class="num  ds0">17.039</td><td class="num ">0.6829</td><td class="num ">0.5374</td><td class="num  ds0">15.270</td><td class="num ">0.5572</td><td class="num ">0.6348</td><td class="num  ds0">20.175</td><td class="num ">0.7009</td><td class="num ">0.4453</td><td class="num  ds0">18.410</td><td class="num ">0.7640</td><td class="num ">0.5324</td></tr><tr class="ours"><td>FL4N (ours)</td><td class="pose">✗</td><td class="num second ds0">21.552</td><td class="num second">0.5348</td><td class="num second">0.3739</td><td class="num second ds0">24.550</td><td class="num second">0.8152</td><td class="num second">0.3353</td><td class="num second ds0">23.547</td><td class="num second">0.7535</td><td class="num second">0.2558</td><td class="num second ds0">24.546</td><td class="num second">0.8040</td><td class="num second">0.2016</td><td class="num second ds0">24.222</td><td class="num best">0.8500</td><td class="num second">0.4413</td></tr><tr class="ours"><td>FL4N (ours)</td><td class="pose">✓</td><td class="num best ds0">21.838</td><td class="num best">0.5578</td><td class="num best">0.3562</td><td class="num best ds0">25.109</td><td class="num best">0.8284</td><td class="num best">0.3234</td><td class="num best ds0">24.272</td><td class="num best">0.7850</td><td class="num best">0.2304</td><td class="num best ds0">27.648</td><td class="num best">0.8732</td><td class="num best">0.1325</td><td class="num best ds0">24.421</td><td class="num second">0.8496</td><td class="num best">0.4382</td></tr></tbody></table></div>
+    <div class="table-scroll reveal" data-label="Novel time synthesis"><table class="res" id="tab-nts"><thead><tr><th rowspan="2">Method</th><th rowspan="2">Pose</th><th colspan="3" class="ds">DyCheck</th><th colspan="3" class="ds">ADT</th><th colspan="3" class="ds">TUM</th></tr><tr><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th class="ds0">PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th></tr></thead><tbody><tr class=""><td>4DGT</td><td class="pose">✓</td><td class="num  ds0">13.743</td><td class="num ">0.4079</td><td class="num ">0.6233</td><td class="num  ds0">16.710</td><td class="num ">0.4999</td><td class="num ">0.5651</td><td class="num  ds0">14.380</td><td class="num ">0.4468</td><td class="num ">0.5612</td></tr><tr class=""><td>MoVieS</td><td class="pose">✓</td><td class="num  ds0">11.755</td><td class="num ">0.3420</td><td class="num ">0.6428</td><td class="num  ds0">15.432</td><td class="num ">0.4698</td><td class="num ">0.5828</td><td class="num  ds0">15.683</td><td class="num ">0.5079</td><td class="num ">0.4426</td></tr><tr class=""><td>NeoVerse<sup>†</sup></td><td class="pose">✗</td><td class="num  ds0">16.756</td><td class="num ">0.4663</td><td class="num ">0.4566</td><td class="num  ds0">16.179</td><td class="num ">0.4384</td><td class="num ">0.5296</td><td class="num  ds0">16.120</td><td class="num ">0.5266</td><td class="num ">0.3981</td></tr><tr class=""><td>C4G<sup>†</sup></td><td class="pose">✗</td><td class="num  ds0">15.755</td><td class="num ">0.4735</td><td class="num ">0.6111</td><td class="num  ds0">18.900</td><td class="num ">0.5813</td><td class="num ">0.5833</td><td class="num  ds0">17.508</td><td class="num ">0.5518</td><td class="num ">0.4951</td></tr><tr class="ours"><td>FL4N (ours)</td><td class="pose">✗</td><td class="num second ds0">19.019</td><td class="num second">0.4977</td><td class="num second">0.4284</td><td class="num second ds0">19.693</td><td class="num second">0.5948</td><td class="num second">0.4490</td><td class="num second ds0">17.847</td><td class="num second">0.5586</td><td class="num second">0.3449</td></tr><tr class="ours"><td>FL4N (ours)</td><td class="pose">✓</td><td class="num best ds0">20.527</td><td class="num best">0.5470</td><td class="num best">0.3757</td><td class="num best ds0">24.115</td><td class="num best">0.6875</td><td class="num best">0.3083</td><td class="num best ds0">21.162</td><td class="num best">0.6978</td><td class="num best">0.2601</td></tr></tbody></table></div>
+    
+
+    <div class="duo" style="grid-template-columns:1fr;max-width:780px">
+      <div class="reveal">
+        <h3>Runtime per rendered view</h3>
+        <p class="caption" style="margin-top:6px">224×224 on one RTX 5880 Ada. The residual is computed once per video; each new target time only runs the time module and renderer.</p>
+        <div class="runtime">
+          <div class="lat-row"><div class="who">C4G<sup>†</sup></div><div class="lat-track"><div class="lat-fill" style="width:100%"></div></div><div class="lat-val">23.885 s · 0.04 FPS</div></div>
+          <div class="lat-row"><div class="who">NeoVerse<sup>†</sup></div><div class="lat-track"><div class="lat-fill" style="width:59%"></div></div><div class="lat-val">14.127 s · 0.07 FPS</div></div>
+          <div class="lat-row"><div class="who">4DGT</div><div class="lat-track"><div class="lat-fill" style="width:3.2%"></div></div><div class="lat-val">0.040 s · 25.0 FPS</div></div>
+          <div class="lat-row"><div class="who">MoVieS</div><div class="lat-track"><div class="lat-fill" style="width:3%"></div></div><div class="lat-val">0.037 s · 27.0 FPS</div></div>
+          <div class="lat-row"><div class="who">C4G</div><div class="lat-track"><div class="lat-fill" style="width:2.9%"></div></div><div class="lat-val">0.036 s · 27.8 FPS</div></div>
+          <div class="lat-row"><div class="who">NeoVerse</div><div class="lat-track"><div class="lat-fill" style="width:2.4%"></div></div><div class="lat-val">0.027 s · 37.0 FPS</div></div>
+          <div class="lat-row ours"><div class="who">FL4N (ours)</div><div class="lat-track"><div class="lat-fill" style="width:2.2%"></div></div><div class="lat-val">0.025 s · 40.0 FPS</div></div>
+        </div>
+      </div>
+          </div>
+      </div>
+</section>
+
+<section class="section" id="analysis">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="eyebrow">Analysis</span><h2>What does the residual latent actually learn?</h2>
+      <p class="lede">The static model knows <i>where</i> to render but not <i>when</i>: it collapses the video into one time-invariant prediction. The residual adds the time axis, only where motion happens.</p></div>
+    <figure class="ifig reveal" data-fig="comparestatic">
+      <figcaption><b>Residual complements static rendering.</b> The static latent alone suppresses moving content (left) or copies it from the nearest context frame (right). Adding the residual places the subject at the target time while keeping the background.</figcaption>
+    </figure>
+    <figure class="ifig reveal" data-fig="dynfeature">
+      <figcaption><b>Residual latent encodes temporal dynamics.</b> The static latent (PCA) shows camera-ray-like structure; the residual latent is quiet on static regions and changes over time around the moving object.</figcaption>
+    </figure>
+          </div>
+</section>
+
+<section class="section" id="bibtex">
+  <div class="wrap wrap--narrow">
+    <div class="section-head reveal"><span class="eyebrow">Citation</span><h2>BibTeX</h2></div>
+    <div class="bib reveal"><pre>BibTeX: TBD (will be added with the arXiv version)</pre></div>
+  </div>
+</section>
+
+
+<div class="lightbox" role="dialog"><button class="lb-close" aria-label="close">✕</button><div class="lb-body"><img alt=""></div><div class="lb-cap"></div></div>
+<script src="static/js/scenes.js?v=202610141020"></script>
+<script src="static/js/main.js?v=202610141020"></script>
+<script src="static/js/figdata.js?v=202610141020"></script>
+<script src="static/js/figures.js?v=202610221730"></script>
+</body>
+</html>

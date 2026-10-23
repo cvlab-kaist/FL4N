@@ -1,0 +1,26 @@
+[
+ {
+  "key": "sample",
+  "no": "00",
+  "title": "Monocular sequence sampling",
+  "text": "Context frames come from one moving camera, each at its own instant; the target is another view and time. Sampling view and time asynchronously separates camera parallax from scene motion."
+ },
+ {
+  "key": "static",
+  "no": "01",
+  "title": "Frozen static encoder",
+  "text": "The pretrained static encoder (24 layers) and renderer stay frozen. They turn the context frames into a static latent that knows geometry and viewpoint, but not time."
+ },
+ {
+  "key": "dyn",
+  "no": "02",
+  "title": "Dynamic encoder",
+  "text": "Eight layers with learnable time tokens, anchored to the frozen static features through cross-attention, output a time-invariant residual latent and a dynamic mask."
+ },
+ {
+  "key": "time",
+  "no": "03",
+  "title": "Target-time adaptation and rendering",
+  "text": "A time module adapts the residual to the target time. Residual plus static latent is decoded by the frozen renderer at the target view."
+ }
+]

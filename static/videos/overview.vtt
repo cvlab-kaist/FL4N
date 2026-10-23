@@ -1,0 +1,28 @@
+WEBVTT
+
+00:00.000 --> 00:02.500
+FL4N: Feed-forward Latent Model for 4D Novel View Synthesis. Title card with the flan logo.
+
+00:02.500 --> 00:06.500
+Eight frames of a monocular video (CamxTime scene 392) fan out along a camera arc: every frame is a new viewpoint and a new instant.
+
+00:06.500 --> 00:11.000
+A view by time grid. Only the diagonal is observed. A target cell off the diagonal is rendered by FL4N.
+
+00:11.000 --> 00:16.000
+Ground truth and FL4N next to four Gaussian-based baselines showing washed-out, holes, ghosting and floater artifacts; FL4N's render appears with a check.
+
+00:16.000 --> 00:25.500
+The architecture figure from the paper lights up stage by stage: monocular sequence sampling, the frozen static encoder and its static latent, the dynamic encoder with learnable time tokens, static anchoring, residual latent and mask head, then the time module, sum and frozen renderer at the target view.
+
+00:25.500 --> 00:31.500
+FL4N output while the time slider sweeps with the camera dot fixed, then with time frozen while the highlighted camera dot moves through eight viewpoints.
+
+00:31.500 --> 00:35.000
+Depth, optical flow, 3D motion labels and per-scene optimisation are each crossed out; the only supervision is rendered target images plus binary motion masks.
+
+00:35.000 --> 00:39.500
+Bar charts of cross-time view synthesis PSNR on NVIDIA, N3DV and CamxTime, FL4N on top, and 40 FPS.
+
+00:39.500 --> 00:41.500
+Closing card: FL4N, Feed-forward Latent Model for 4D Novel View Synthesis.
