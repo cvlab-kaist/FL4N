@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+checkpoints/
+third_party/
+exps/
+benchmark_out/
+data/*/
+!data/sources/
