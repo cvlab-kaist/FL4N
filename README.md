@@ -107,8 +107,16 @@ out = model(images, rays, cam_token, num_cond_views=K, tau=tau)   # [b, K + T, 3
 ```
 
 ## 📝 Citation
-
-TBA
+```bibtex
+@misc{hong2026fl4n,
+  title         = {{FL4N}: Feed-forward Latent Model for 4D Novel View Synthesis},
+  author        = {Hong, Eunbeen and Yu, Hyeonseo and An, Honggyu and Son, Jooho and Ko, Hyunah and Son, Soowon and Kim, Chaehyun and Koo, Jahyeok and Kim, Jisoo and Hur, Junhwa and Kim, Seungryong},
+  year          = {2026},
+  eprint        = {2610.35854},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+}
+```
 
 ## 🙏 Acknowledgements
 
